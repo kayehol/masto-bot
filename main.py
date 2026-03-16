@@ -4,10 +4,21 @@ from mastodon import Mastodon
 from random import shuffle
 from dotenv import load_dotenv
 
+initial = [
+    'Nosferatu.jpg',
+    'Nosferatu-2.jpg',
+    'Rozz Williams.jpg',
+    'She Past Away.jpg',
+    'The Cure 1980.jpg',
+    'The Vampire Lovers (1970).jpg',
+    'The Vampire Lovers (1970)-2.jpg',
+    'Vincent Price - The Raven.jpg'
+]
+
 
 def post(image):
     media_file = "./imgs/" + image
-    print("posting " + media_file)
+    print("posting " + image)
     media_ids = mastodon.media_post(
         media_file=media_file,
         mime_type="image/jpg"
@@ -18,9 +29,9 @@ def post(image):
     )
 
 
-def save_last(img):
+def save_last(img_list):
     last = open("last", "wb")
-    pickle.dump(img, last)
+    pickle.dump(img_list, last)
     last.close()
 
 
@@ -33,29 +44,27 @@ def load_last():
 
 def is_repeated(img):
     if not (os.path.isfile("last")):
-        return False
+        last = initial
+    else:
+        last = load_last()
 
-    last = load_last()
-    if (type(last) is not str) or (type(img) is not str):
-        print("last or current img is not a string")
-
-    return img == last
+    return img in last
 
 
 def get_img():
     img_dir = "imgs/"
     img_list = os.listdir(img_dir)
     shuffle(img_list)
-    if is_repeated(img_list[0]):
+    while is_repeated(img_list[0]):
         shuffle(img_list)
 
-    return img_list[0]
+    return img_list
 
 
 def main():
-    img = get_img()
-    post(img)
-    save_last(img)
+    img_list = get_img()
+    post(img_list[0])
+    save_last(img_list)
 
 
 if __name__ == "__main__":

@@ -36,12 +36,16 @@ def load_last():
     return last
 
 
-def is_repeated(img):
+def get_last():
     if not (os.path.isfile("last")):
         last = initial
     else:
         last = load_last()
+    return last
 
+
+def is_repeated(img):
+    last = get_last()
     return img in last
 
 
@@ -49,7 +53,8 @@ def get_img():
     img_dir = "imgs/"
     img_list = os.listdir(img_dir)
     shuffle(img_list)
-    while is_repeated(img_list[0]):
+    while len(img_list) > 0 and is_repeated(img_list[0]):
+        print("shuffling image list")
         shuffle(img_list)
 
     return img_list
@@ -58,7 +63,11 @@ def get_img():
 def main():
     img_list = get_img()
     post(img_list[0])
-    save_last(img_list)
+    print('adding ' + img_list[0] + ' to posted list\n')
+    last = get_last()
+    last.append(img_list[0])
+    print('posted list:' + ",".join(last))
+    save_last(last)
 
 
 if __name__ == "__main__":

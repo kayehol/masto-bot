@@ -5,14 +5,7 @@ from random import shuffle
 from dotenv import load_dotenv
 
 initial = [
-    'Nosferatu.jpg',
-    'Nosferatu-2.jpg',
-    'Rozz Williams.jpg',
-    'She Past Away.jpg',
-    'The Cure 1980.jpg',
-    'The Vampire Lovers (1970).jpg',
-    'The Vampire Lovers (1970)-2.jpg',
-    'Vincent Price - The Raven.jpg'
+    # initial filenames on directory
 ]
 
 
@@ -23,8 +16,9 @@ def post(image):
         media_file=media_file,
         mime_type="image/jpg"
     )
+    tags = "#goth"
     mastodon.status_post(
-        status=image + "\n" + "#goth",
+        status=image + "\n" + tags,
         media_ids=media_ids,
     )
 

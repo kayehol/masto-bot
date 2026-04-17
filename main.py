@@ -5,20 +5,21 @@ from random import shuffle
 from dotenv import load_dotenv
 
 initial = [
-    # initial filenames on directory
+    # initial filenames
 ]
 
 
-def post(image):
-    media_file = "./imgs/" + image
-    print("posting " + image)
+def post(filename):
+    media_file = "./imgs/" + filename
     media_ids = mastodon.media_post(
         media_file=media_file,
         mime_type="image/jpg"
     )
     tags = "#goth"
+    image_name = filename.split('.')[0]
+    print("posting " + image_name)
     mastodon.status_post(
-        status=image + "\n" + tags,
+        status=image_name + "\n" + tags,
         media_ids=media_ids,
     )
 
